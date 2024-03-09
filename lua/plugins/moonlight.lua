@@ -1,9 +1,13 @@
 return {
-	"shaunsingh/moonlight.nvim",
-	name = "moonlight",
-	priority = 1000,
+	"maxmx03/fluoromachine.nvim",
 	config = function()
-		require("moonlight").set()
-		vim.cmd.colorscheme = moonlight
+		local fm = require("fluoromachine")
+
+		fm.setup({
+			glow = false,
+			theme = "fluoromachine",
+		})
+
+		vim.cmd.colorscheme("fluoromachine")
 	end,
 }
