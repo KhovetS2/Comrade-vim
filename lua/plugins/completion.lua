@@ -1,8 +1,8 @@
 return {
-    
-    {
-        'hrsh7th/cmp-nvim-lsp'
-    },
+
+	{
+		"hrsh7th/cmp-nvim-lsp",
+	},
 	{
 		"L3MON4D3/LuaSnip",
 		dependencies = {
@@ -15,6 +15,7 @@ return {
 		"hrsh7th/nvim-cmp",
 		config = function()
 			local cmp = require("cmp")
+			local luasnip = require("luasnip")
 			require("luasnip.loaders.from_vscode").lazy_load()
 			cmp.setup({
 				snippet = {
@@ -31,13 +32,27 @@ return {
 					["<C-f>"] = cmp.mapping.scroll_docs(4),
 					["<C-Space>"] = cmp.mapping.complete(),
 					["<C-e>"] = cmp.mapping.abort(),
-					["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+					["<C-y>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+					["<C-n>"] = cmp.mapping.select_next_item(),
+					-- Select the [p]revious item
+					["<C-p>"] = cmp.mapping.select_prev_item(),
+					["<C-l>"] = cmp.mapping(function()
+						if luasnip.expand_or_locally_jumpable() then
+							luasnip.expand_or_jump()
+						end
+					end, { "i", "s" }),
+					["<C-h>"] = cmp.mapping(function()
+						if luasnip.locally_jumpable(-1) then
+							luasnip.jump(-1)
+						end
+					end, { "i", "s" }),
 				}),
 				sources = cmp.config.sources({
 					{ name = "nvim_lsp" },
 					{ name = "luasnip" }, -- For luasnip users.
 				}, {
 					{ name = "buffer" },
+					{ name = "path" },
 				}),
 			})
 		end,
