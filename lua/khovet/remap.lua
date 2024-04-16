@@ -104,6 +104,10 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
+vim.keymap.set("n", "<leader>bc", "<cmd>bdelete<CR>", { desc = "Close buffer!" })
+vim.keymap.set("n", "|", "<cmd>vsplit<cr>", { desc = "Vertical Split" })
+vim.keymap.set("n", "\\", "<cmd>split<cr>", { desc = "Horizontal Split" })
+
 -- greatest remap ever
 vim.keymap.set("x", "<leader>p", [["_dP]])
 
