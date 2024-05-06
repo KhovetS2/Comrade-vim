@@ -74,6 +74,22 @@ return {
 			tsserver = {},
 			eslint = {},
 			cssls = {},
+			java_language_server = {},
+			tailwindcss = {
+				tailwindCSS = {
+					classAttributes = { "class", "className", "class:list", "classList", "ngClass" },
+					lint = {
+						cssConflict = "warning",
+						invalidApply = "error",
+						invalidConfigPath = "error",
+						invalidScreen = "error",
+						invalidTailwindDirective = "error",
+						invalidVariant = "error",
+						recommendedVariantOrder = "warning",
+					},
+					validate = true,
+				},
+			},
 			lua_ls = {
 				settings = {
 					Lua = {
