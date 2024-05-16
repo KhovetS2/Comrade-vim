@@ -74,7 +74,7 @@ return {
 			tsserver = {},
 			eslint = {},
 			cssls = {},
-			java_language_server = {},
+			jdtls = {},
 			tailwindcss = {
 				tailwindCSS = {
 					classAttributes = { "class", "className", "class:list", "classList", "ngClass" },
@@ -119,6 +119,7 @@ return {
 			"stylua", -- Used to format lua code
 			"prettier",
 			"prettierd",
+			"eslint_d",
 		})
 
 		local capabilities = vim.lsp.protocol.make_client_capabilities()
