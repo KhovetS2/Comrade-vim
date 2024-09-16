@@ -4,7 +4,7 @@ vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 vim.opt.guicursor = ""
 
 vim.opt.nu = true
-vim.opt.relativenumber = true
+vim.opt.relativenumber = false
 
 -- Tab config
 vim.opt.tabstop = 2
@@ -117,3 +117,12 @@ vim.keymap.set("n", "<leader>Y", [["+Y]])
 vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 
 vim.keymap.set("i", "<C-c>", "<Esc>")
+
+vim.cmd("set number")
+vim.cmd("set mouse=a")
+vim.cmd("syntax enable")
+vim.cmd("set showcmd")
+vim.cmd("set encoding=utf-8")
+vim.cmd("set showmatch")
+vim.cmd("set autoindent")
+vim.cmd("set smarttab")
