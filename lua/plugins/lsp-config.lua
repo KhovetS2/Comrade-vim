@@ -71,7 +71,7 @@ return {
 		require("mason").setup()
 		local servers = {
 			pyright = {},
-			tsserver = {},
+			ts_ls = {},
 			eslint = {},
 			cssls = {},
 			jdtls = {},
