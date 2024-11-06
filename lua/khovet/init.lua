@@ -1,1 +1,3 @@
-require("khovet.remap")
+require("khovet.options")
+require("khovet.keymaps")
+
