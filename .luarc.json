@@ -1,6 +1,7 @@
 {
     "diagnostics.globals": [
         "vim",
-        "fun"
+        "fun",
+        "Snacks"
     ]
 }
