@@ -3,5 +3,8 @@
         "vim",
         "fun",
         "Snacks"
+    ],
+    "diagnostics.disable": [
+        "missing-fields"
     ]
 }
