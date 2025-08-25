@@ -1,7 +1,7 @@
 vim.opt.guicursor = ""
 vim.opt.nu = true
 vim.opt.relativenumber = true
-
+vim.env.OPENAI_API_KEY = vim.env.OPENAI_API_KEY or "ollama"
 -- Tab config
 vim.opt.tabstop = 2
 vim.opt.softtabstop = 2
@@ -27,7 +27,6 @@ vim.opt.smartcase = true
 vim.o.backup = false -- creates a backup file
 vim.o.writebackup = false -- if a file is being edited by another program (or was written to file while editing with another program), it is not allowed to be edited
 vim.opt.termguicolors = true -- set termguicolors to enable highlight groups
-
 
 -- Keep signcolumn on by default
 vim.opt.signcolumn = "yes"
