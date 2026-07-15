@@ -6,56 +6,64 @@ return {
 		"hrsh7th/cmp-nvim-lsp",
 	},
 	config = function()
-		-- 1) Inicia o Mason
 		require("mason").setup()
 
-		-- 2) Configura o mason-lspconfig
 		require("mason-lspconfig").setup({
 			ensure_installed = {
-				"pyright",
-				"ts_ls", -- TypeScript (substitui tsserver)
+				"ts_ls",
 				"eslint",
 				"cssls",
 				"tailwindcss",
 				"lua_ls",
-				"vue_ls", -- Vue (vue-language-server)
+				"rust_analyzer",
+				"pyright",
+				"volar",
 			},
 			automatic_installation = true,
-			automatic_enable = false, -- desativa o vim.lsp.enable() interno
+			automatic_enable = {
+				exclude = { "rust_analyzer" },
+			},
 		})
 
-		-- 3) Capacidades para nvim-cmp
 		local capabilities = vim.lsp.protocol.make_client_capabilities()
 		capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
-		-- 4) on_attach com seus atalhos
-		local on_attach = function(_, bufnr)
-			local nmap = function(keys, fn, desc)
-				vim.keymap.set("n", keys, fn, { buffer = bufnr, desc = "LSP: " .. desc })
-			end
+		-- Apply capabilities to all servers globally
+		vim.lsp.config("*", { capabilities = capabilities })
 
-			nmap("gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
-			nmap("gr", vim.lsp.buf.references, "[G]oto [R]eferences")
-			nmap("gI", vim.lsp.buf.implementation, "[G]oto [I]mplementation")
-			nmap("<leader>D", vim.lsp.buf.type_definition, "[T]ype Definition")
-			nmap("<leader>ds", vim.lsp.buf.document_symbol, "[D]ocument [S]ymbols")
-			nmap("<leader>ws", vim.lsp.buf.workspace_symbol, "[W]orkspace [S]ymbols")
-			nmap("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
-			nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
-			nmap("K", vim.lsp.buf.hover, "Hover Documentation")
-			nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-		end
+		-- Keymaps via LspAttach (replaces on_attach)
+		vim.api.nvim_create_autocmd("LspAttach", {
+			group = vim.api.nvim_create_augroup("lsp-keymaps", { clear = true }),
+			callback = function(ev)
+				local bufnr = ev.buf
+				local nmap = function(keys, fn, desc)
+					vim.keymap.set("n", keys, fn, { buffer = bufnr, desc = "LSP: " .. desc })
+				end
+				nmap("gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
+				nmap("gr", vim.lsp.buf.references, "[G]oto [R]eferences")
+				nmap("gI", vim.lsp.buf.implementation, "[G]oto [I]mplementation")
+				nmap("<leader>D", vim.lsp.buf.type_definition, "[T]ype Definition")
+				nmap("<leader>ds", vim.lsp.buf.document_symbol, "[D]ocument [S]ymbols")
+				nmap("<leader>ws", vim.lsp.buf.workspace_symbol, "[W]orkspace [S]ymbols")
+				nmap("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
+				nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
+				nmap("K", vim.lsp.buf.hover, "Hover Documentation")
+				nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 
-		local lspconfig = require("lspconfig")
+				local client = vim.lsp.get_client_by_id(ev.data.client_id)
+				if client and client.name == "rust-analyzer" then
+					vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+				end
+			end,
+		})
 
-		-- 5) Caminho padrão onde o Mason instala o @vue/language-server
+		-- Rust: configurado via rustaceanvim (lua/plugins/rust.lua)
+
+		-- TypeScript + Vue
 		local data_path = vim.fn.stdpath("data")
 		local vue_lang_path = data_path .. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
 
-		-- 6) Configura o ts_ls para dar suporte também a .vue
-		lspconfig.ts_ls.setup({
-			on_attach = on_attach,
-			capabilities = capabilities,
+		vim.lsp.config("ts_ls", {
 			init_options = {
 				plugins = {
 					{
@@ -65,24 +73,7 @@ return {
 					},
 				},
 			},
-			filetypes = {
-				"typescript",
-				"javascript",
-				"javascriptreact",
-				"typescriptreact",
-				"vue",
-			},
+			filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
 		})
-
-		-- 7) Configura o vue_ls (vue-language-server) para Vue puro
-		lspconfig.volar.setup({
-			on_attach = on_attach,
-			capabilities = capabilities,
-		})
-
-		-- 8) Demais servidores sem configuração extra
-		for _, srv in ipairs({ "pyright", "eslint", "cssls", "tailwindcss", "lua_ls" }) do
-			lspconfig[srv].setup({ on_attach = on_attach, capabilities = capabilities })
-		end
 	end,
 }
